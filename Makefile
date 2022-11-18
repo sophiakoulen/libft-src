@@ -13,63 +13,68 @@
 NAME = libft.a
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I.
-SRC = ft_isalnum.o \
-ft_isalpha.o \
-ft_isascii.o \
-ft_isdigit.o \
-ft_isprint.o \
-ft_bzero.o \
-ft_memcpy.o \
-ft_memmove.o \
-ft_memset.o \
-ft_strlen.o \
-ft_strlcat.o \
-ft_strlcpy.o \
-ft_tolower.o \
-ft_toupper.o \
-ft_strchr.o \
-ft_strrchr.o \
-ft_strncmp.o \
-ft_memcmp.o \
-ft_memchr.o \
-ft_strnstr.o \
-ft_atoi.o \
-ft_calloc.o \
-ft_strdup.o \
-ft_substr.o \
-ft_strjoin.o \
-ft_strtrim.o \
-ft_itoa.o \
-ft_strmapi.o \
-ft_striteri.o \
-ft_putchar_fd.o \
-ft_putstr_fd.o \
-ft_putendl_fd.o \
-ft_putnbr_fd.o \
-ft_split.o
 
-BONUS = ft_lstnew_bonus.o \
-ft_lstadd_front_bonus.o \
-ft_lstsize_bonus.o \
-ft_lstlast_bonus.o \
-ft_lstadd_back_bonus.o \
-ft_lstdelone_bonus.o \
-ft_lstclear_bonus.o \
-ft_lstiter_bonus.o \
-ft_lstmap_bonus.o
+OTHER_FUNCS =  ft_bzero \
+ft_strlen \
+ft_strlcat \
+ft_strlcpy \
+ft_strchr \
+ft_strrchr \
+ft_strncmp \
+ft_strnstr \
+ft_atoi \
+ft_calloc \
+ft_strdup \
+ft_substr \
+ft_strjoin \
+ft_strtrim \
+ft_itoa \
+ft_strmapi \
+ft_striteri \
+ft_putchar_fd \
+ft_putstr_fd \
+ft_putendl_fd \
+ft_putnbr_fd \
+ft_split
 
-EXTRA = extra/ft_sign.o \
-extra/ft_itoa_base.o \
-extra/ft_nbr_abs_len.o \
-extra/ft_nbr_len.o \
-extra/ft_nbr_len_unsigned.o \
-extra/ft_putnbr_base_fd.o \
-extra/ft_itoa_base_unsigned.o \
-extra/ft_putnbr_base_unsigned_fd.o
+EXTRA_FUNCS = ft_sign \
+ft_itoa_base \
+ft_nbr_abs_len \
+ft_nbr_len \
+ft_nbr_len_unsigned \
+ft_putnbr_base_fd \
+ft_itoa_base_unsigned \
+ft_putnbr_base_unsigned_fd
+
+LIST_FUNCS = ft_lstadd_back \
+ft_lstadd_front \
+ft_lstclear \
+ft_lstdelone \
+ft_lstiter \
+ft_lstlast \
+ft_lstmap \
+ft_lstnew \
+ft_lstsize
+
+CTYPE_FUNCS = ft_isalnum \
+ft_isalpha \
+ft_isascii \
+ft_isdigit \
+ft_isprint \
+ft_tolower \
+ft_toupper
+
+MEM_FUNCS = ft_memchr \
+ft_memcmp \
+ft_memcpy \
+ft_memmove \
+ft_memset
+
+ALL_OBJS = $(addsuffix .o, $(addprefix mem/, $(MEM_FUNCS)) $(addprefix ctype/, $(CTYPE_FUNCS)) $(addprefix linked-lists/, $(LIST_FUNCS)) $(addprefix extra/, $(EXTRA_FUNCS)) $(OTHER_FUNCS))
 
 all: $(NAME)
 
-$(NAME): $(SRC)
+$(NAME): $(ALL_OBJS)
 	ar rc $@ $?
 	ranlib $@
 
@@ -78,16 +83,10 @@ $(NAME): $(SRC)
 
 
 clean:
-	rm -rf $(SRC) $(BONUS) $(EXTRA)
+	rm -rf $(ALL_OBJS)
 
 fclean:	clean
 	rm -f $(NAME)
 
 re: fclean all
-
-bonus: $(SRC) $(BONUS)
-	ar rcs $(NAME) $(SRC) $(BONUS)
-
-extra: $(SRC) $(BONUS) $(EXTRA)
-	ar rcs $(NAME) $(SRC) $(BONUS) $(EXTRA)
 
