@@ -6,7 +6,7 @@
 /*   By: skoulen <skoulen@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 14:22:31 by skoulen           #+#    #+#             */
-/*   Updated: 2022/11/21 14:36:15 by skoulen          ###   ########.fr       */
+/*   Updated: 2022/11/21 14:39:41 by skoulen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char	*ft_gettok(char *str, char *sep)
 	return (res);
 }
 
-static int	cleanup(char **arr, size_t n)
+static char	**cleanup(char **arr, size_t n)
 {
 	size_t	i;
 
