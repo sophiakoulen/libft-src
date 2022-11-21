@@ -44,7 +44,8 @@ ft_nbr_len \
 ft_nbr_len_unsigned \
 ft_putnbr_base_fd \
 ft_itoa_base_unsigned \
-ft_putnbr_base_unsigned_fd
+ft_putnbr_base_unsigned_fd \
+ft_split2
 
 LIST_FUNCS = ft_lstadd_back \
 ft_lstadd_front \

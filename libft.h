@@ -94,4 +94,6 @@ void	ft_putnbr_base_fd(int n, char *symbols, int fd);
 char	*ft_itoa_base_unsigned(size_t n, char *symbols);
 void	ft_putnbr_base_unsigned_fd(size_t n, char *symbols, int fd);
 
+char	**ft_split2(char *str, char *sep);
+
 #endif
