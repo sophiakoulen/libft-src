@@ -12,7 +12,7 @@
 
 NAME = libft.a
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I.
+CFLAGS = -Wall -Wextra -Werror
 
 OTHER_FUNCS =  ft_bzero \
 ft_strlen \
@@ -71,7 +71,16 @@ ft_memcpy \
 ft_memmove \
 ft_memset
 
-ALL_OBJS = $(addsuffix .o, $(addprefix mem/, $(MEM_FUNCS)) $(addprefix ctype/, $(CTYPE_FUNCS)) $(addprefix linked-lists/, $(LIST_FUNCS)) $(addprefix extra/, $(EXTRA_FUNCS)) $(OTHER_FUNCS))
+INCLUDE_PATH := -I.
+
+LIST_OBJS = $(addsuffix .o, $(addprefix linked-lists/, $(LIST_FUNCS)))
+
+ALL_OBJS := $(addsuffix .o, $(addprefix mem/, $(MEM_FUNCS)) $(addprefix ctype/, $(CTYPE_FUNCS)) $(addprefix extra/, $(EXTRA_FUNCS)) $(OTHER_FUNCS))
+
+ifndef NOLIST
+	ALL_OBJS += $(LIST_OBJS)
+	INCLUDE_PATH += -Ilinked-lists
+endif
 
 all: $(NAME)
 
@@ -80,7 +89,7 @@ $(NAME): $(ALL_OBJS)
 	ranlib $@
 
 .c.o:
-	$(CC) $(CFLAGS) -c $? -o $@
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) -c $? -o $@
 
 
 clean:
