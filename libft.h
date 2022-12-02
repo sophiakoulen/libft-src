@@ -71,6 +71,8 @@ int		ft_nbr_len_unsigned(size_t n, size_t base);
 
 int		ft_sign(int n);
 
+int		ft_isspace(int c);
+
 char	*ft_itoa_base(int n, char *symbols);
 void	ft_putnbr_base_fd(int n, char *symbols, int fd);
 
