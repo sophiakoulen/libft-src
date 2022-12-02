@@ -38,6 +38,7 @@ ft_putnbr_fd \
 ft_split
 
 EXTRA_FUNCS = ft_sign \
+ft_isspace \
 ft_itoa_base \
 ft_nbr_abs_len \
 ft_nbr_len \
