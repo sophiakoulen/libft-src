@@ -75,7 +75,8 @@ ft_nbr_len_unsigned \
 ft_putnbr_base_fd \
 ft_itoa_base_unsigned \
 ft_putnbr_base_unsigned_fd \
-ft_split2
+ft_split2 \
+ft_strcmp
 
 HEADERS := ./includes
 
