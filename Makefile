@@ -1,14 +1,18 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    makefile                                           :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: skoulen <marvin@42lausanne.ch>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/11 10:31:58 by skoulen           #+#    #+#              #
-#    Updated: 2022/10/11 10:32:04 by skoulen          ###   ########.fr        #
+#    Updated: 2023/03/01 16:42:44 by skoulen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+#some escape sequences
+MOVE_UP = "\033[1A"
+ERASE_END = "\033[K"
 
 NAME = libft.a
 
@@ -93,21 +97,30 @@ OBJS = $(addsuffix .o, $(addprefix objs/, $(FILES)))
 
 INCLUDE_PATH = $(addprefix -I, $(HEADERS))
 
-all: $(NAME)
+all: format $(NAME)
+
+format:
+	@echo libft up-to-date
 
 $(NAME): $(OBJS) $(HEADERS)
-	ar rc $@ $(OBJS)
-	ranlib $@
+	@echo $(MOVE_UP)archiving the lib$(ERASE_END)
+	@ar rcs $@ $(OBJS)
+	@echo $(MOVE_UP)libft ok$(ERASE_END)
 
 objs/%.o: %.c
-	mkdir -p objs
-	$(CC) $(CFLAGS) $(INCLUDE_PATH) -c $? -o $@
+	@mkdir -p objs
+	@echo $(MOVE_UP)compiling $< $(ERASE_END)
+	@$(CC) $(CFLAGS) $(INCLUDE_PATH) -c $< -o $@
 
 
-clean:
-	rm -rf objs
+clean: format
+	@echo $(MOVE_UP)removing object files$(ERASE_END)
+	@rm -rf objs
 
 fclean:	clean
-	rm -f $(NAME)
+	@echo $(MOVE_UP)removing the lib$(ERASE_END)
+	@rm -f $(NAME)
 
-re: fclean all
+re: format fclean $(NAME)
+
+.PHONY: clean fclean all re format
