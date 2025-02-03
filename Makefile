@@ -80,9 +80,10 @@ ft_putnbr_base_fd \
 ft_itoa_base_unsigned \
 ft_putnbr_base_unsigned_fd \
 ft_split2 \
-ft_strcmp
+ft_strcmp \
+ft_printf
 
-HEADERS := ./includes
+HEADERS := ./include
 
 FILES := $(MANDATORY_FUNCS)
 ifndef FT_NO_LIST

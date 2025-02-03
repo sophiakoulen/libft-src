@@ -16,7 +16,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stddef.h>
-
+# include "ft_printf.h"
 /* mandatory functions, equivalent to some standard libc functions */
 
 int		ft_isalnum(int c);
