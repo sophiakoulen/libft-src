@@ -23,7 +23,7 @@
 	number of digits a number has in a given base.
 */
 
-int	ft_nbr_len(int n, int base)
+int	ft_nbr_len(long long int n, int base)
 {
 	int	abs_len;
 

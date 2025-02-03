@@ -4,10 +4,67 @@ static void	ft_printf_get_value(va_list ap, char specifier, t_value *val);
 static int	ft_printf_length_value(t_value val, char specifier);
 static void	ft_printf_print_value(t_value val, char specifier, int fd);
 
+int parse_flags(const char* format, int *flags)
+{
+	int i = 0;
+	*flags = 0;
+	while (ft_strchr("#0- +'", format[i]) != NULL)
+	{
+		if (format[i] == '0')
+			*flags |= ZERO_PAD;
+		i++;
+	}
+	return i;	
+}
+
+int parse_width(const char* format, int* width)
+{
+	int i = 0;
+	*width = 0;
+	*width = atoi(format);
+	while (format[i] >= '0' && format[i] <= '9')
+		i++;
+	return i;
+}
+
+int parse_modifier(const char* format, int* modifier)
+{
+	int i = 0;
+	*modidier = 0;
+	if (format[i] = 'l')
+	{
+		*modifier = MODIF_LONG;
+		i++;
+	}
+	return i;
+}
+
+int parse_conversion(const char* format, char* conversion)
+{
+	int i = 0;
+	*conversion = 0;
+	if (ft_strchr("cipsxXu", format[i]))
+	{
+		*conversion = format[i];
+		i++;
+	}
+	return i;
+}
+
+//returns number of characters read, or -1
+int parse_specifier(const char** format, t_spec *specifier)
+{
+	format += parse_flags(format, &(specifier->flags));
+	format += parse_width(format, &(specifier->width));
+	format += parse_modifier(format, &(specifier->modifier));
+	format += conversion(format, &(specifier->conversion));
+}
+
 int	ft_vdprintf(int fd, const char *format, va_list ap)
 {
 	int		ret;
 	t_value	val;
+	t_spec	specifier;
 
 	ret = 0;
 	while (*format)
@@ -20,8 +77,11 @@ int	ft_vdprintf(int fd, const char *format, va_list ap)
 		else
 		{
 			format++;
-			ft_printf_get_value(ap, *format, &val);
-			ft_printf_print_value(val, *format, fd);
+			
+			format += parse_specifier(format, &specifier);
+
+			ft_printf_get_value(ap, specifier, &val);
+			ft_printf_print_value(val, specifier, fd);
 			ret += ft_printf_length_value(val, *format);
 		}
 		format++;
@@ -59,68 +119,70 @@ int	ft_dprintf(int fd, const char *format, ...)
 	return (ret);
 }
 
-void	ft_printf_get_value(va_list ap, char specifier, t_value *val)
+void	ft_printf_get_value(va_list ap, t_spec s, t_value *val)
 {
-	if (specifier == 'i' || specifier == 'd' || specifier == 'c')
+	if ((s->conversion == 'i' || s->conversion == 'd' || s->conversion == 'c') && !s->modifier)
 		val->i = va_arg(ap, int);
-	else if (specifier == 'u' || specifier == 'x' || specifier == 'X')
-		val->u = va_arg(ap, unsigned);
-	else if (specifier == 's')
+	else if ((s->conversion == 'i' || s->conversion == 'd') && s->modifier == MODIF_LONG)
+		val->li = va_arg(ap, long int);
+	else if ((s->conversion == 'u' || s->conversion == 'x' || s->conversion == 'X') && !s->modifier)
+		val->u = va_arg(ap, unsigned int);
+	else if ((s->conversion == 'u' || s->conversion == 'x' || s->conversion == 'X') && s->modifier == MODIF_LONG)
+		val->lu = va_arg(ap, unsigned long int);
+	else if (s->conversion == 's')
 		val->s = va_arg(ap, char *);
-	else if (specifier == 'p')
+	else if (s->conversion == 'p')
 		val->p = va_arg(ap, void *);
 }
 
-int	ft_printf_length_value(t_value val, char specifier)
+int	ft_printf_length_value(t_value val, t_spec s)
 {
-	int	res;
+	int	res = 0;
 
-	if (specifier == 'i' || specifier == 'd')
+	if (s->conversion == 'i' || s->conversion == 'd')
 		res = ft_nbr_len(val.i, 10);
-	else if (specifier == 'u')
+	else if (s->conversion == 'u')
 		res = ft_nbr_len_unsigned(val.u, 10);
-	else if (specifier == 'x' || specifier == 'X')
+	else if (s->conversion == 'x' || s->conversion == 'X')
 		res = ft_nbr_len_unsigned(val.u, 16);
-	else if (specifier == 'c' || specifier == '%')
+	else if (s->conversion == 'c' || s->conversion == '%')
 		res = 1;
-	else if (specifier == 's')
+	else if (s->conversion == 's')
 	{
 		if (val.s)
 			res = ft_strlen(val.s);
 		else
 			res = ft_strlen("(null)");
 	}
-	else if (specifier == 'p')
+	else if (s->conversion == 'p')
 		res = 2 + ft_nbr_len_unsigned((size_t)val.p, 16);
-	else
-		res = 0;
 	return (res);
 }
 
 void	ft_printf_print_value(t_value val, char specifier, int fd)
 {
-	if (specifier == 'i' || specifier == 'd')
+	if (s->conversion == 'i' || s->conversion == 'd')
 		ft_putnbr_fd(val.i, fd);
-	else if (specifier == 'u')
+	else if (s->conversion == 'u')
 		ft_putnbr_base_unsigned_fd(val.u, DECIMAL, fd);
-	else if (specifier == 'x')
+	else if (s->conversion == 'x')
 		ft_putnbr_base_unsigned_fd(val.u, HEX_LOWER, fd);
-	else if (specifier == 'X')
+	else if (s->conversion == 'X')
 		ft_putnbr_base_unsigned_fd(val.u, HEX_UPPER, fd);
-	else if (specifier == 'c')
+	else if (s->conversion == 'c')
 		ft_putchar_fd((unsigned char)val.i, fd);
-	else if (specifier == 's')
+	else if (s->conversion == 's')
 	{
 		if (val.s)
 			ft_putstr_fd(val.s, fd);
 		else
 			ft_putstr_fd("(null)", fd);
 	}
-	else if (specifier == 'p')
+	else if (s->conversion == 'p')
 	{
 		ft_putstr_fd("0x", fd);
 		ft_putnbr_base_unsigned_fd((size_t)val.p, HEX_LOWER, fd);
 	}
-	else if (specifier == '%')
+	else if (s->conversion == '%')
 		ft_putchar_fd('%', fd);
 }

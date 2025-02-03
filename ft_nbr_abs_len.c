@@ -26,7 +26,7 @@
 	using bitwise operations, yielding a result in constant time.
 */
 
-int	ft_nbr_abs_len(int n, int base)
+int	ft_nbr_abs_len(long long int n, int base)
 {
 	int	len;
 

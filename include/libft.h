@@ -81,9 +81,9 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 /* personal additions */
 # ifndef FT_NO_EXTRA
 
-int		ft_nbr_abs_len(int n, int base);
-int		ft_nbr_len(int n, int base);
-int		ft_nbr_len_unsigned(size_t n, size_t base);
+int		ft_nbr_abs_len(long long int n, int base);
+int		ft_nbr_len(long long int n, int base);
+int		ft_nbr_len_unsigned(unsigned long long n, unsigned int base);
 int		ft_sign(int n);
 int		ft_isspace(int c);
 char	*ft_itoa_base(int n, char *symbols);

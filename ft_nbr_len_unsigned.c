@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-int	ft_nbr_len_unsigned(size_t n, size_t base)
+int	ft_nbr_len_unsigned(unsigned long long int n, unsigned int base)
 {
 	int	len;
 

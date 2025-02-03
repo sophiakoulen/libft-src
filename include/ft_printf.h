@@ -13,10 +13,20 @@
 typedef union u_value
 {
 	int				i;
+	long int		li;
 	unsigned int	u;
+	long unsigned int	lu;
 	char			*s;
 	void			*p;
 }	t_value;
+
+typedef struct s_spec
+{
+	int	flags;
+	int width;
+	int modifier;
+	char conversion;
+} t_spec;
 
 int		ft_printf(const char *format, ...);
 int		ft_vprintf(const char *format, va_list ap);
