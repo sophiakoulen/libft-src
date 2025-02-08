@@ -24,7 +24,7 @@ int parse_width(const char* format, int* width)
 {
 	int i = 0;
 	*width = 0;
-	*width = atoi(format);
+	*width = ft_atoi(format);
 	while (format[i] >= '0' && format[i] <= '9')
 		i++;
 	return i;
@@ -89,7 +89,6 @@ int	ft_vdprintf(int fd, const char *format, va_list ap)
 			ft_printf_get_value(ap, specifier, &val);
 			ft_printf_print_value(val, specifier, fd);
 			ret += ft_printf_length_value(val, specifier);
-			format += ret;
 		}
 	}
 	return (ret);
@@ -167,6 +166,18 @@ int	ft_printf_length_value(t_value val, t_spec s)
 
 void	ft_printf_print_value(t_value val, t_spec s, int fd)
 {
+	if (s.width > 0)
+	{
+		char fill = ' ';
+		if (s.flags & ZERO_PAD)
+			fill = '0';
+		int len = ft_printf_length_value(val, s);
+		if (len < 0)
+			return;
+		for (int i = 0; i < s.width - len; i++)
+			ft_putchar_fd(fill, fd);
+	}
+
 	if (s.conversion == 'i' || s.conversion == 'd')
 		ft_putnbr_fd(val.i, fd);
 	else if (s.conversion == 'u')
